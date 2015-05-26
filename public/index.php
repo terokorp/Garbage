@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & E_NOTICE);
 $folder=".";
-$ignore = array("index.php", "thumb.php", "footer.php", ".", "..", ".img", "archive", "dropbox");
+$ignore = array("index.php", "thumb.php", "footer.php", ".", "..", ".img", "archive", "dropbox", "thumb");
 
 $types['image']=array("jpg", "jpeg", "gif", "png");
 $types['music']=array("mp3", "ogg", "mid");

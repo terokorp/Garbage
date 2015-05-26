@@ -14,7 +14,7 @@ function createthumb($name,$new_w,$new_h){
 
 
 	$md5 = md5_file($name);
-	$thumbdir = "/srv/www/garbage.koodaa.net/thumbs/".substr($md5, 0, 2)."/";
+	$thumbdir = realpath(dirname(__FILE__)."/../thumbs")."/".substr($md5, 0, 2)."/";
 	if(!is_dir($thumbdir)) {mkdir($thumbdir, 0777);}
 
 	$eTag = '"'.$md5.'t"';
