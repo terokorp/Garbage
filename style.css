@@ -1,0 +1,25 @@
+#filelist {
+	overflow: hidden;
+}
+.box {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	height: 220px;
+	width: 170px;
+	background-color: #eeeeee;
+	border: 1px solid;
+	float: left;
+	text-align: center;
+}
+
+img { border: 0; }
+
+#extra {
+	position: fixed;
+	width: 75px;
+	height: 56px;
+	top: 200px;
+	right: 5px;
+	background: url(img/image.gif);
+}

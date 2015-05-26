@@ -1,0 +1,68 @@
+IndexOptions +FoldersFirst
+#IndexOrderDefault Descending Date
+IndexStyleSheet "/style.css"
+AddCharset utf-8 .html .php
+
+#IndexIgnore README.html svn *.sh
+IndexIgnore README.html git
+ReadmeName /README.html
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+# Estetään hakukoneita
+        RewriteRule ^(.*/)?\.svn/ - [F,L]
+        RewriteRule ^(.*/)?\.git/ - [F,L]
+        RewriteCond %{HTTP_USER_AGENT} ^Links [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^Lynx [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^Baiduspider [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^Yandex [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^Ezooms [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^Mail.RU_Bot [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^Sosospide [NC,OR]
+        RewriteCond %{HTTP_USER_AGENT} ^MJ12bot [NC]
+        RewriteRule !^(robots.txt)$ - [F,L]
+
+
+# Estetään spammeri ipitä
+	RewriteCond %{REMOTE_ADDR} (192\.168\.66\.11)$ [OR]
+	RewriteCond %{REMOTE_ADDR} (192\.168\.66\.12)$
+	RewriteRule ^(.*)$ - [L,F]
+
+# Estetään tietyt refererit
+	RewriteCond %{REMOTE_ADDR} (192\.168\.66\.3)$
+	RewriteCond %{HTTP_REFERER} ^http://(.+\.)?example\.com
+	RewriteRule ^(.*)$ - [L,G]
+
+# Estetään hotlink muista kuin listatuista osoitteista
+	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?koodaa\.net/ [NC]
+	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?google\.com/ [NC]
+	RewriteCond %{HTTP_REFERER} !^(http|https)://(.+\.)?facebook\.com/ [NC]
+	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?link\.smartscreen\.live\.com/ [NC]
+	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?goo\.gl/ [NC]
+	RewriteCond %{HTTP_REFERER} !^$
+	RewriteRule .*\.(jpe?g|gif|bmp|png)$ http://example.com/stop-hotlink/index.php [r=301,nc]
+
+
+# Ohjataan mobiiliselain mobiilisivulle
+#	RewriteCond %{HTTP_USER_AGENT} SymbianOS [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Series60 [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Nokia [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Windows\ CE [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} BlackBerry [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} NetFront [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Opera\ Mini [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Palm\ OS [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Blazer [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Elaine [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} ^WAP.*$ [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Plucker [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} AvantGo [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} Android [NC,OR]
+#	RewriteCond %{HTTP_USER_AGENT} HTC [NC]
+#	RewriteCond $1 !^index_mobi.php
+#	RewriteRule ^$ index_mobi.php/$1 [L]
+
+
+</IfModule>
+

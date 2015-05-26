@@ -1,0 +1,28 @@
+<?php
+define("NAME",			"Garbage");				# System name
+define("SLOGAN",		"a bin for all of my cool junk");	# Slogan
+define("MAX_SIZE",		50 * 1024 * 1024);			# Max filesize (50M = 50 * 1024 * 1024)
+define("SHOWTITLE", 		false);					# Show title & slogan
+define("IMG",			"garbage.jpg");				# Picture filename
+define("IMG_WIDTH",		640);					# Picture width
+define("IMG_HEIGHT",		480);					# Picture height
+define("DEBUG",			false);					# DEBUG MODE
+
+$conf['mysql']['server']=	"localhost";
+$conf['mysql']['username']=	"";
+$conf['mysql']['password']=	"";
+$conf['mysql']['database']=	"garbage";
+
+//define("CLOSED",	"The server load is very high at the moment.");	# remove comment to disable whole system
+
+# Define folders
+# foldername, type, showname, can upload
+# types: 
+#    date: foldername/yyyy-mm/filename.xxx
+#   plain: foldername/filename.xxx
+$folders = array(
+	array("public",   "date",   "Public",  true),
+	array("private",  "date",   "Private", true),
+	array("adm",      "plain",  "Admin",   true),
+);
+
