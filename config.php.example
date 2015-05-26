@@ -8,16 +8,11 @@ define("IMG_WIDTH",		640);					# Picture width
 define("IMG_HEIGHT",		480);					# Picture height
 define("DEBUG",			false);					# DEBUG MODE
 
-$conf['mysql']['server']=	"localhost";
-$conf['mysql']['username']=	"";
-$conf['mysql']['password']=	"";
-$conf['mysql']['database']=	"garbage";
-
 //define("CLOSED",	"The server load is very high at the moment.");	# remove comment to disable whole system
 
 # Define folders
 # foldername, type, showname, can upload
-# types: 
+# types:
 #    date: foldername/yyyy-mm/filename.xxx
 #   plain: foldername/filename.xxx
 $folders = array(
