@@ -15,6 +15,7 @@ define("DEBUG",			false);					# DEBUG MODE
 # types:
 #    date: foldername/yyyy-mm/filename.xxx
 #   plain: foldername/filename.xxx
+
 $folders = array(
 	array("public",   "date",   "Public",  true),
 	array("private",  "date",   "Private", true),
