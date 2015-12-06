@@ -61,7 +61,7 @@ function start(file) {
 	
 	formData.append("folder", folder.value);
 	formData.append("file", file);
-	xhr.open("POST", "/index.php", true);
+	xhr.open("POST", "index.php", true);
 	xhr.onload = function(e) {
 
 	};
