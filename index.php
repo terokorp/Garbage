@@ -122,7 +122,7 @@ function isbanned($ip) {
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 	<link rel="icon" type="image/x-icon" href="favicon.ico">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="/drag.js" type="text/javascript"></script>
+	<script src="drag.js" type="text/javascript"></script>
         <style type="text/css">
         <!--
 	html, body, div, p { padding: 0; margin: 0; }
