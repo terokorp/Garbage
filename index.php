@@ -32,12 +32,12 @@ $banned = array(
 /* #          DO NOT MODIFY ANYHING BELOW THIS LINE!          # */
 /* ############################################################ */
 
-define("VERSION", "V1.10.0");
+define("VERSION", "V1.11.0 broken");
 
 if(DEBUG == true) error_reporting(E_ALL ^ E_NOTICE);
 	else error_reporting(0);
 
-defined('CLOSED') &&  die('<html><head><title>'.NAME.'</title></head><body><table border=0 width=100% height=80%><tr><td><h3 align=center>'.CLOSED.'</h3><p align=center>Garbage '.VERSION.' &copy; koodaa.net</p></td></tr></table></body></html>');
+defined('CLOSED') &&  die('<html><head><title>'.$cfg['NAME'].'</title></head><body><table border=0 width=100% height=80%><tr><td><h3 align=center>'.$cfg['CLOSED'].'</h3><p align=center>Garbage '.VERSION.' &copy; koodaa.net</p></td></tr></table></body></html>');
 $datafolder = $folders[0][0];
 foreach ($folders as $folder) {
 	if($_POST['folder'] == $folder[0]) {
@@ -61,8 +61,6 @@ if(file_exists($_FILES['file']['tmp_name'])) {
 	else $dir = $datafolder . "/";
 	if(!is_dir($dir)) {
 		mkdir($dir, 0777) or die("System error (sysop: turn debug on :)");
-		symlink("../index.php", $dir."index.php");
-		symlink("../thumb.php", $dir."thumb.php");
 	}
 
 	if(file_exists($dir.$_FILES['file']['name'])) $error .= "Duplicate file " . $_FILES['file']['name']."<br>";
@@ -114,7 +112,7 @@ function isbanned($ip) {
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><?=NAME?></title>
+	<title><?=$cfg['NAME']?></title>
 	<meta http-equiv="Cache-Control" content="NO-CACHE">
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<meta name="Description" content="a bin for all of my cool junk">
@@ -167,11 +165,11 @@ function isbanned($ip) {
 	</head>
 	<body>
 	<div align=center>
-		<?php if(SHOWTITLE != false) echo '<div class="h1">'.NAME.'</div><p>'.SLOGAN.'</p><br>'; ?>
-		<a href="<?php echo $folders[0][0];?>">
-			<img id="drop" src="/img/<?=IMG?>" width="<?=IMG_WIDTH?>" height="<?=IMG_HEIGHT?>" border="0" alt="" />
+		<?php if(SHOWTITLE != false) echo '<div class="h1">'.$cfg['NAME'].'</div><p>'.$cfg['SLOGAN'].'</p><br>'; ?>
+		<a href="<?php echo "list.php?/".$cfg['folders'][0][0];?>">
+			<img id="drop" src="<?=$cfg['WEBDIR'];?>/img/<?=$cfg['IMG']?>" width="<?=$cfg['IMG_WIDTH']?>" height="<?=$cfg['IMG_HEIGHT']?>" border="0" alt="" />
 		</a><br />
-		<?php foreach ($folders as $folder) { echo '<a href="'.$folder[0].'">['.$folder[2].']</a> ';} ?><br>
+		<?php foreach ($folders as $folder) { echo '<a href="'.$cfg['folder'][0].'">['.$cfg['folder'][2].']</a> ';} ?><br>
 		<?php if(!isbanned(getip())) { ?>
 		<form action="" method="post" ENCTYPE="multipart/form-data">
 			<input type="file" name="file" size="20">
@@ -179,8 +177,8 @@ function isbanned($ip) {
 				$foldernum=0;
 				foreach ($folders as $folder) {
 					if($folder[3]==true) {
-						if($foldernum==0) echo "<option value=\"$folder[0]\" selected>$folder[2]</option>";
-						else echo "<option value=\"$folder[0]\">".$folder[2]."</option>";
+						if($foldernum==0) echo "<option value=\"".$cfg['folder'][0]."\" selected>".$folder[2]."</option>";
+						else echo "<option value=\"".$cfg['folder'][0]."\">".$cfg['folder'][2]."</option>";
 						$foldernum++;
 					}
 				}

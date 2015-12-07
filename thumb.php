@@ -1,4 +1,15 @@
 <?php
+$webroot = realpath(dirname(__FILE__));
+$requested = realpath(dirname(__FILE__)) . $_SERVER['QUERY_STRING'];
+
+if(substr($requested, 0, strlen($webroot)) == $webroot) {
+        $path = substr($requested, strlen($webroot));
+        $file = $webroot . $path;
+}
+else {
+        die("Invalid folder");
+}
+
 function createthumb($name,$new_w,$new_h){
 	$ext=explode('.',$name);
 	$ext=strtolower($ext[count($ext)-1]);
@@ -14,7 +25,7 @@ function createthumb($name,$new_w,$new_h){
 
 
 	$md5 = md5_file($name);
-	$thumbdir = realpath(dirname(__FILE__)."/../thumbs")."/".substr($md5, 0, 2)."/";
+	$thumbdir = realpath(dirname(__FILE__)."/thumbs")."/".substr($md5, 0, 2)."/";
 	if(!is_dir($thumbdir)) {mkdir($thumbdir, 0777);}
 
 	$eTag = '"'.$md5.'t"';
@@ -59,6 +70,4 @@ function createthumb($name,$new_w,$new_h){
 		imagedestroy($src_img);
 	}
 }
-$file = explode("/",$_SERVER[PATH_INFO]);
-$file = $file[count($file)-1];
 createthumb($file,150,160);

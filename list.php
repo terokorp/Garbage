@@ -1,35 +1,51 @@
 <?php
+require_once("config.php");
+
 error_reporting(E_ALL & E_NOTICE);
-$folder=".";
-$ignore = array("index.php", "thumb.php", "footer.php", ".", "..", ".img", "archive", "dropbox", "thumb");
+$ignore = array("index.php", "thumb.php", "footer.php", ".", "..", ".img", "archive", "dropbox", "thumb", ".git");
 
 $types['image']=array("jpg", "jpeg", "gif", "png");
-$types['music']=array("mp3", "ogg", "mid");
-$types['docum']=array("txt", "html", "doc");
+$types['music']=array("mp3", "ogg", "mid", "flac");
+$types['docum']=array("txt", "html", "doc", "md");
 $types['video']=array("avi", "mp4", "mov", "mkv");
 $types['arch']=array("zip", "tar", "gz", "rar", "lzh");
+$types['exec']=array("exe", "bin");
+$types['flash']=array("swf");
 
 $perpage=100;
 
+$webroot = realpath(dirname(__FILE__));
+$requested = realpath(dirname(__FILE__) . $_SERVER['QUERY_STRING']);
+$requestedparent = realpath(dirname(__FILE__) . $_SERVER['QUERY_STRING'] . "/..");
+
+if(substr($requested, 0, strlen($webroot)) == $webroot) {
+	$path = substr($requested, strlen($webroot));
+	$parent = substr($requestedparent, strlen($webroot));
+	$folder = $webroot . $path;
+}
+else {
+	die("Invalid folder");
+}
+
 function listfiles() {
-	global $folder, $ignore;
+	global $folder, $path, $ignore, $cfg;
 	$folders=array();
 	$files=array();
 	$others=array();
-	if ($handle = opendir($folder)) {
+	if($handle = opendir($folder)) {
 		$count = 0;
 		while (false !== ($name = readdir($handle))) {
 			if(!in_array($name, $ignore)) {
 				$type="";
 				$count++;
-				if(is_dir($name)) {
+				if(is_dir($folder."/".$name)) {
 					$folders[$name. "d".filemtime($name)." ".$count] = array(
 						'name' => $name,
 						'created' => date("d.m.Y H:i",filemtime($name)),
 						'type' => "dir",
 					);
 				}
-				elseif(is_file($name)) {
+				elseif(is_file($folder."/".$name)) {
 					$ext=explode(".", $name);
 					$ext=$ext[count($ext)-1];
 					$files["d".filemtime($name)." ".$count] = array(
@@ -77,13 +93,13 @@ function byteConvert(&$bytes){
 	$e = (int)(log($b,$con));
 	return number_format($b/pow($con,$e),2,',','.').' '.$s[$e];
 }
-$uri=explode("?", $_SERVER['REQUEST_URI']);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fi" lang="fi">
 <head>
-	<title> Garbage - <?=$uri[0]; ?> </title>
+	<title> Garbage - <?=$path; ?> </title>
 	<meta name="Author" content="Tero 'Thasan' Korpela" />
 	<meta name="Generator" content="GNU nano 2.0.2" />
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -111,8 +127,8 @@ $uri=explode("?", $_SERVER['REQUEST_URI']);
 </head>
 <body>
 <div id="container">
-<h1>Index of <?=$uri[0]; ?></h1>
-<a href="../">&lt;--</a><br />
+<h1>Index of <?=$path;?></h1>
+<a href="<?=$cfg['WEBROOT']."list.php?".$parent;?>">&lt;--</a><br />
 <?php
 $files = listfiles();
 if(isset($_GET['page'])) $page = $_GET['page'];
@@ -133,29 +149,43 @@ $end   = $perpage * ($page);
 if($end > count($files)) $end = count($files);
 echo "" . ($start+1) . " - " . $end . "<br />";
 
+	echo $cfg['WEBDIR'];
 
 echo '<div id="filelist">';
-
 for($i = $start ; $i < $end ; $i++) {
 	$data = $files[$i];
 	$target = $data['name'];
-	$imgfile="/img/ico_unknow.jpg";
+	$imgfile=$cfg['WEBROOT']."img/ico_unknow.jpg";
+
 	if(!isset($data['ext'])) $data['ext'] = "";
-	if(in_array($data['ext'], $types['image'])) $imgfile="thumb/".$data['name'];
-	if(in_array($data['ext'], $types['music'])) $imgfile="/img/ico_music.jpg";
-	if(in_array($data['ext'], $types['video'])) $imgfile="/img/ico_video.jpg";
-	if(in_array($data['ext'], $types['docum'])) $imgfile="/img/ico_document.jpg";
-	if(in_array($data['ext'], $types['arch']))  $imgfile="/img/ico_archive.jpg";
-	if($data['ext'] == "exe") $imgfile="/img/ico_executable.jpg";
-	if($data['ext'] == "swf") $imgfile="/img/ico_flash.jpg";
-	if($data['type']== "dir") $imgfile="/img/ico_folder.jpg";
+	if(in_array($data['ext'], $types['image'])) {
+		$imgfile=$cfg['WEBDIR']."/thumb.php?".$path."/".$data['name'];
+		$target=$cfg['WEBDIR'].$path."/".$data['name'];
+	}
+
+	if($data['type']== "dir") {
+		$imgfile=$cfg['WEBDIR']."/img/ico_folder.jpg";
+		$target=$cfg['WEBDIR']."/list.php?".$path."/".$data['name'];
+	}
+
 	if($data['ext'] == "url") {
-		$imgfile="/img/ico_link.jpg";
+		$imgfile=$cfg['WEBDIR']."/img/ico_link.jpg";
 		preg_match_all("/URL\=([a-z0-9.,:\/&?% ^+-]+)/i", file_get_contents($data['name']), $matches);
 		$target=$matches[1][0];
 	}
+
+	foreach($types as $key => $type) {
+		if(!empty($imgfile)) break;
+		if(in_array($data['ext'], $types[$key]) ) {
+			$imgfile=$cfg['WEBROOT']."/img/ico_".$key.".jpg";
+			$target=$cfg['WEBROOT']."".$path."/".$data['name'];
+		}
+	}
+
+	if(empty($imgfile)) $imgfile=$cfg['WEBROOT']."/img/ico_unknow.jpg";
+
 	echo '<div class="box">';
-	echo '	<div class="name"><a href="'.$data['name'].'">'.$data['name'].'</a></div>';
+	echo '	<div class="name"><a href="'.$target.'">'.$data['name'].'</a></div>';
 	echo '	<div class="img"><a href="'.$target.'"><img src="'.$imgfile.'" alt="'.$data['name'].'" /></a></div>';
 	echo '	<div class="date">'.$data['created'].'</div>';
 	echo '	<div class="size">'.($data['type']=="file" ? byteConvert($data['size']) : "").'</div>';
