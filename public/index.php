@@ -116,9 +116,9 @@ $uri=explode("?", $_SERVER['REQUEST_URI']);
 <?php
 $files = listfiles();
 if(isset($_GET['page'])) $page = $_GET['page'];
-if(empty($page) || !is_numeric($page) || $page < 1) $page = 1;
+if(empty($page) || !is_numeric($page)) $page = 1;
 if($page > ceil(count($files) / $perpage)) $page = ceil(count($files) / $perpage);
-
+if($page < 1) $page = 1;
 
 echo '<a href="?page='.($page-1).'">&lt;&lt;</a> ';
 for($i=1 ; $i < ceil(count($files) / $perpage)+1 ; $i++) {
