@@ -39,28 +39,28 @@ function listfiles() {
 				$type="";
 				$count++;
 				if(is_dir($folder."/".$name)) {
-					$folders[$name. "d".filemtime($name)." ".$count] = array(
+					$folders[$folder."/".$name. "d".filemtime($folder."/".$name)." ".$count] = array(
 						'name' => $name,
-						'created' => date("d.m.Y H:i",filemtime($name)),
+						'created' => date("d.m.Y H:i",filemtime($folder."/".$name)),
 						'type' => "dir",
 					);
 				}
 				elseif(is_file($folder."/".$name)) {
 					$ext=explode(".", $name);
 					$ext=$ext[count($ext)-1];
-					$files["d".filemtime($name)." ".$count] = array(
+					$files["d".filemtime($folder."/".$name)." ".$count] = array(
 						'name' => $name,
-						'created' => date("d.m.Y H:i",filemtime($name)),
-						'type'=>"file",
+						'created' => date("d.m.Y H:i",filemtime($folder."/".$name)),
+						'type'=> "file",
 						'ext' => strtolower($ext),
-						'size' => filesize($name),
+						'size' => filesize($folder."/".$name),
 					);
 				}
 				else {
-					$others["d".filemtime($name)." ".$count] = array(
+					$others["d".filemtime($folder."/".$name)." ".$count] = array(
 						'name' => $name,
-						'created' => date("d.m.Y H:i", filemtime($name)),
-						'type'=>"unknow",
+						'created' => date("d.m.Y H:i", filemtime($folder."/".$name)),
+						'type'=> "unknow",
 					);
 				}
 			}
@@ -155,7 +155,7 @@ echo '<div id="filelist">';
 for($i = $start ; $i < $end ; $i++) {
 	$data = $files[$i];
 	$target = $data['name'];
-	$imgfile=$cfg['WEBROOT']."img/ico_unknow.jpg";
+	$imgfile="";
 
 	if(!isset($data['ext'])) $data['ext'] = "";
 	if(in_array($data['ext'], $types['image'])) {
@@ -176,13 +176,13 @@ for($i = $start ; $i < $end ; $i++) {
 
 	foreach($types as $key => $type) {
 		if(!empty($imgfile)) break;
-		if(in_array($data['ext'], $types[$key]) ) {
-			$imgfile=$cfg['WEBROOT']."/img/ico_".$key.".jpg";
-			$target=$cfg['WEBROOT']."".$path."/".$data['name'];
+		if(in_array($data['ext'], $type) ) {
+			$imgfile=$cfg['WEBDIR'].$path."/img/ico_".$key.".jpg";
+			$target=$cfg['WEBDIR']."/".$data['name'];
 		}
 	}
 
-	if(empty($imgfile)) $imgfile=$cfg['WEBROOT']."/img/ico_unknow.jpg";
+	if(empty($imgfile)) $imgfile=$cfg['WEBDIR'].$path."/img/ico_unknow.jpg";
 
 	echo '<div class="box">';
 	echo '	<div class="name"><a href="'.$target.'">'.$data['name'].'</a></div>';
