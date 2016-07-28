@@ -163,7 +163,7 @@ function isbanned($ip) {
 
 	--></style>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<?php if(file_exists("analtytic.inc")) readfile("analtytic.inc"); ?>
+	<?php if(file_exists("analytic.inc")) readfile("analytic.inc"); ?>
 	</head>
 	<body>
 	<div align=center>
