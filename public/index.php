@@ -107,7 +107,7 @@ $uri=explode("?", $_SERVER['REQUEST_URI']);
 			margin-bottom: 0px;
 		}
 	</style>
-<?php /* Analytics code supoosed to be here too */ ?>
+<?php if(file_exists($_SERVER['DOCUMENT_ROOT'] . "/analytic.inc")) readfile($_SERVER['DOCUMENT_ROOT'] . "/analytic.inc"); /* Analytics code supoosed to be here too */ ?>
 </head>
 <body>
 <div id="container">
