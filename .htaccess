@@ -35,11 +35,10 @@ ReadmeName /README.html
 	RewriteRule ^(.*)$ - [L,G]
 
 # Estetään hotlink muista kuin listatuista osoitteista
-	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?koodaa\.net/ [NC]
-	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?google\.com/ [NC]
+	RewriteCond %{HTTP_REFERER} !^(http|https)://(.+\.)?koodaa\.net/ [NC]
+	RewriteCond %{HTTP_REFERER} !^(http|https)://(.+\.)?google\.com/ [NC]
 	RewriteCond %{HTTP_REFERER} !^(http|https)://(.+\.)?facebook\.com/ [NC]
-	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?link\.smartscreen\.live\.com/ [NC]
-	RewriteCond %{HTTP_REFERER} !^http://(.+\.)?goo\.gl/ [NC]
+	RewriteCond %{HTTP_REFERER} !^(http|https)://(.+\.)?goo\.gl/ [NC]
 	RewriteCond %{HTTP_REFERER} !^$
 	RewriteRule .*\.(jpe?g|gif|bmp|png)$ http://example.com/stop-hotlink/index.php [r=301,nc]
 
