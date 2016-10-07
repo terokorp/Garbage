@@ -32,7 +32,7 @@ $banned = array(
 /* #          DO NOT MODIFY ANYHING BELOW THIS LINE!          # */
 /* ############################################################ */
 
-define("VERSION", "V1.10.0");
+define("VERSION", "V1.10.1");
 
 if(DEBUG == true) error_reporting(E_ALL ^ E_NOTICE);
 	else error_reporting(0);
@@ -75,6 +75,9 @@ if(file_exists($_FILES['file']['tmp_name'])) {
 		}
 		if (ereg("^\.ht(.*)$", strtolower($_FILES['file']['name']))){
 			$error .= "Filetype is denied. (" . $_FILES['file']['name'] . ")";
+		}
+		if ($_FILES['file']["error"] != UPLOAD_ERR_OK) {
+			$error= "oops, something went wrong. Try again";
 		}
 		if($error == "") {
 			move_uploaded_file($_FILES['file']['tmp_name'], $dir.$_FILES['file']['name']); // tallennetaan tiedosto serverille
